@@ -11,12 +11,12 @@ UScWEquipmentFragment_Drop::UScWEquipmentFragment_Drop()
 	bDropOnDeath = false;
 }
 
-void UScWEquipmentFragment_Drop::BP_OnEquipped_Implementation(UScWEquipmentInstance* InInstance) // UScWEquipmentFragment
+void UScWEquipmentFragment_Drop::BP_OnEquipped_Implementation(UScWEquipmentInstance* InInstance) const // UScWEquipmentFragment
 {
 
 }
 
-void UScWEquipmentFragment_Drop::BP_OnUnequipped_Implementation(UScWEquipmentInstance* InInstance) // UScWEquipmentFragment
+void UScWEquipmentFragment_Drop::BP_OnUnequipped_Implementation(UScWEquipmentInstance* InInstance) const // UScWEquipmentFragment
 {
 
 }

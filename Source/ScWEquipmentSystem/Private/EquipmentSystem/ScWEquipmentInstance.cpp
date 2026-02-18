@@ -46,7 +46,6 @@ void UScWEquipmentInstance::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ThisClass, Instigator);
-	DOREPLIFETIME(ThisClass, SpawnedActors);
 }
 
 #if UE_WITH_IRIS
@@ -84,41 +83,15 @@ APawn* UScWEquipmentInstance::GetTypedPawn(TSubclassOf<APawn> PawnType) const
 	return Result;
 }
 
-void UScWEquipmentInstance::SpawnEquipmentActors(const TArray<FScWEquipmentActorToSpawn>& ActorsToSpawn)
-{
-	if (APawn* OwningPawn = GetPawn())
-	{
-		USceneComponent* AttachTarget = OwningPawn->GetRootComponent();
-		if (ACharacter* Char = Cast<ACharacter>(OwningPawn))
-		{
-			AttachTarget = Char->GetMesh();
-		}
-		for (const FScWEquipmentActorToSpawn& SpawnInfo : ActorsToSpawn)
-		{
-			AActor* NewActor = GetWorld()->SpawnActorDeferred<AActor>(SpawnInfo.ActorToSpawn, FTransform::Identity, OwningPawn);
-			NewActor->FinishSpawning(FTransform::Identity, /*bIsDefaultTransform=*/ true);
-			NewActor->SetActorRelativeTransform(SpawnInfo.AttachTransform);
-			NewActor->AttachToComponent(AttachTarget, FAttachmentTransformRules::KeepRelativeTransform, SpawnInfo.AttachSocket);
-
-			SpawnedActors.Add(NewActor);
-		}
-	}
-}
-
-void UScWEquipmentInstance::DestroyEquipmentActors()
-{
-	for (AActor* Actor : SpawnedActors)
-	{
-		if (Actor)
-		{
-			Actor->Destroy();
-		}
-	}
-}
-
 void UScWEquipmentInstance::OnEquipped()
 {
-	K2_OnEquipped();
+	ensureReturn(EquipmentDefinition);
+	for (const UScWEquipmentFragment* SampleFragment : EquipmentDefinition->Fragments)
+	{
+		ensureContinue(SampleFragment);
+		SampleFragment->BP_OnEquipped(this);
+	}
+	BP_OnEquipped();
 
 	UGameplayMessageSubsystem& GameplayMessageSubsystem = UGameplayMessageSubsystem::Get(this);
 	FGameplayMessage_EquipmentInstance EquippedMessage = { this };
@@ -127,7 +100,13 @@ void UScWEquipmentInstance::OnEquipped()
 
 void UScWEquipmentInstance::OnUnequipped()
 {
-	K2_OnUnequipped();
+	ensureReturn(EquipmentDefinition);
+	for (const UScWEquipmentFragment* SampleFragment : EquipmentDefinition->Fragments)
+	{
+		ensureContinue(SampleFragment);
+		SampleFragment->BP_OnUnequipped(this);
+	}
+	BP_OnUnequipped();
 
 	UGameplayMessageSubsystem& GameplayMessageSubsystem = UGameplayMessageSubsystem::Get(this);
 	FGameplayMessage_EquipmentInstance UnequippedMessage = { this };

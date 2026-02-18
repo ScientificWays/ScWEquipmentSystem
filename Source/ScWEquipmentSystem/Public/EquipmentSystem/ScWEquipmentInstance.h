@@ -33,8 +33,9 @@ class UScWEquipmentInstance : public UObject
 public:
 	UScWEquipmentInstance(const FObjectInitializer& InObjectInitializer = FObjectInitializer::Get());
 
-	virtual bool IsSupportedForNetworking() const override { return true; } // UObject
 	virtual UWorld* GetWorld() const override final; // UObject
+	virtual bool IsSupportedForNetworking() const override { return true; } // UObject
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // UObject
 
 	UFUNCTION(BlueprintPure, Category = "Equipment")
 	UScWEquipmentManagerComponent* GetOwningEquipmentManagerComponent() const;
@@ -53,15 +54,6 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Equipment", meta = (DeterminesOutputType = PawnType))
 	APawn* GetTypedPawn(TSubclassOf<APawn> PawnType) const;
 
-	UFUNCTION(BlueprintPure, Category = "Equipment")
-	TArray<AActor*> GetSpawnedActors() const { return SpawnedActors; }
-
-	UFUNCTION(BlueprintPure, Category = "Equipment")
-	AActor* GetPrimarySpawnedActor() const { return SpawnedActors.IsEmpty() ? nullptr : SpawnedActors[0]; }
-
-	virtual void SpawnEquipmentActors(const TArray<FScWEquipmentActorToSpawn>& ActorsToSpawn);
-	virtual void DestroyEquipmentActors();
-
 	virtual void OnEquipped();
 	virtual void OnUnequipped();
 
@@ -71,16 +63,13 @@ protected:
 	virtual void RegisterReplicationFragments(UE::Net::FFragmentRegistrationContext& Context, UE::Net::EFragmentRegistrationFlags RegistrationFlags) override;
 #endif // UE_WITH_IRIS
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "Equipment", meta = (DisplayName="OnEquipped"))
-	void K2_OnEquipped();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Equipment", meta = (DisplayName="On Equipped"))
+	void BP_OnEquipped();
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "Equipment", meta = (DisplayName="OnUnequipped"))
-	void K2_OnUnequipped();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Equipment", meta = (DisplayName="On Unequipped"))
+	void BP_OnUnequipped();
 
 private:
-
-	UPROPERTY(Replicated)
-	TArray<TObjectPtr<AActor>> SpawnedActors;
 
 	UPROPERTY(ReplicatedUsing = "OnRep_Instigator")
 	TObjectPtr<UObject> Instigator;

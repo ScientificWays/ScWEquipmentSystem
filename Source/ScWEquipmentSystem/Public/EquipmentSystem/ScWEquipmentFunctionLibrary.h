@@ -36,8 +36,8 @@ public:
 //~ Begin Actors
 public:
 
-	UFUNCTION(Category = "Actors", BlueprintCallable, BlueprintPure, meta = (CallableWithoutWorldContext, AutoCreateRefTerm = "InEquipmentTag"))
-	static MODULE_API class AActor* GetOwnerEquipmentActorWithDefinitionTag(const class AActor* InOwnerActor, const FGameplayTag& InEquipmentTag);
+	//UFUNCTION(Category = "Actors", BlueprintCallable, BlueprintPure, meta = (CallableWithoutWorldContext, AutoCreateRefTerm = "InEquipmentTag"))
+	//static MODULE_API class AActor* GetOwnerEquipmentActorWithDefinitionTag(const class AActor* InOwnerActor, const FGameplayTag& InEquipmentTag);
 //~ End Actors
 
 //~ Begin Abilities

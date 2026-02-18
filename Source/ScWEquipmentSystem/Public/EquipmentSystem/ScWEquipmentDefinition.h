@@ -11,28 +11,8 @@ class UScWAbilitySet;
 class UScWEquipmentFragment;
 class UScWEquipmentInstance;
 
-USTRUCT()
-struct FScWEquipmentActorToSpawn
-{
-	GENERATED_BODY()
-
-	FScWEquipmentActorToSpawn() {}
-
-	UPROPERTY(EditAnywhere, Category=Equipment)
-	TSubclassOf<AActor> ActorToSpawn;
-
-	UPROPERTY(EditAnywhere, Category=Equipment)
-	FName AttachSocket;
-
-	UPROPERTY(EditAnywhere, Category=Equipment)
-	FTransform AttachTransform;
-};
-
-
 /**
- * UScWEquipmentDefinition
- *
- * Definition of a piece of equipment that can be applied to a pawn
+ *	Definition of a piece of equipment that can be applied to a pawn
  */
 UCLASS(Const, Abstract, Blueprintable, BlueprintType)
 class UScWEquipmentDefinition : public UObject
@@ -62,12 +42,4 @@ public:
 	// Class to spawn
 	UPROPERTY(Category = "Equipment", EditDefaultsOnly)
 	TSubclassOf<UScWEquipmentInstance> InstanceType;
-
-	// Gameplay ability sets to grant when this is equipped
-	UPROPERTY(Category = "Equipment", EditDefaultsOnly)
-	TArray<TObjectPtr<const UScWAbilitySet>> AbilitySetsToGrant;
-
-	// Actors to spawn on the pawn when this is equipped
-	UPROPERTY(Category = "Equipment", EditDefaultsOnly)
-	TArray<FScWEquipmentActorToSpawn> ActorsToSpawn;
 };

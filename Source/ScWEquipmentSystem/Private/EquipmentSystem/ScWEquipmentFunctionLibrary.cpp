@@ -65,14 +65,14 @@ USkeletalMeshComponent* UScWEquipmentFunctionLibrary::GetEquipmentThirdPersonMes
 //~ End Meshes
 
 //~ Begin Actors
-AActor* UScWEquipmentFunctionLibrary::GetOwnerEquipmentActorWithDefinitionTag(const AActor* InOwnerActor, const FGameplayTag& InEquipmentTag)
+/*AActor* UScWEquipmentFunctionLibrary::GetOwnerEquipmentActorWithDefinitionTag(const AActor* InOwnerActor, const FGameplayTag& InEquipmentTag)
 {
 	UScWEquipmentManagerComponent* OwnerManager = GetEquipmentManagerComponentFromActor(InOwnerActor);
 	ensureReturn(OwnerManager, nullptr);
 	
 	UScWEquipmentInstance* TagInstance = OwnerManager->GetFirstInstanceWithDefinitionTag(InEquipmentTag);
-	return TagInstance->GetPrimarySpawnedActor();
-}
+	return TagInstance->GetSpawnedActors();
+}*/
 //~ End Actors
 
 //~ Begin Abilities

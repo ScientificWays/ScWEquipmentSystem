@@ -4,8 +4,6 @@
 
 #include "ScWEquipmentSystem.h"
 
-#include "AbilitySystem/ScWAbilitySet.h"
-
 #include "ScWEquipmentManagerComponent.generated.h"
 
 #define MODULE_API SCWEQUIPMENTSYSTEM_API
@@ -32,20 +30,19 @@ struct FScWAppliedEquipmentEntry : public FFastArraySerializerItem
 
 	FString GetDebugString() const;
 
+	TSubclassOf<UScWEquipmentDefinition> GetDefinitionClass() const { return DefinitionClass; }
+	const UScWEquipmentInstance* GetInstance() const { return Instance; }
+
 private:
 	friend FScWEquipmentList;
 	friend UScWEquipmentManagerComponent;
 
 	// The equipment class that got equipped
 	UPROPERTY()
-	TSubclassOf<UScWEquipmentDefinition> EquipmentDefinition;
+	TSubclassOf<UScWEquipmentDefinition> DefinitionClass;
 
 	UPROPERTY()
 	TObjectPtr<UScWEquipmentInstance> Instance = nullptr;
-
-	// Authority-only list of granted handles
-	UPROPERTY(NotReplicated)
-	FScWAbilitySet_GrantedHandles GrantedHandles;
 };
 
 /** List of applied equipment */
@@ -75,6 +72,8 @@ public:
 	{
 		return FFastArraySerializer::FastArrayDeltaSerialize<FScWAppliedEquipmentEntry, FScWEquipmentList>(Entries, DeltaParms, *this);
 	}
+
+	const TArray<FScWAppliedEquipmentEntry>& GetEntries() const { return Entries; }
 
 	UScWEquipmentInstance* AddEntry(TSubclassOf<UScWEquipmentDefinition> EquipmentDefinition);
 	void RemoveEntry(UScWEquipmentInstance* Instance);
@@ -115,6 +114,7 @@ public:
 protected:
 	virtual void InitializeComponent() override; // UActorComponent
 	virtual void UninitializeComponent() override; // UActorComponent
+	virtual void BeginPlay() override; // UActorComponent
 	virtual void EndPlay(const EEndPlayReason::Type InEndPlayReason) override; // UActorComponent
 //~ End Initialize
 	
@@ -128,6 +128,9 @@ protected:
 //~ Begin Equip
 public:
 
+	UFUNCTION(Category = "Equip", BlueprintCallable)
+	MODULE_API const FScWEquipmentList& GetEquipmentList() const { return EquipmentList; }
+
 	UFUNCTION(Category = "Equip", BlueprintCallable, BlueprintAuthorityOnly)
 	MODULE_API UScWEquipmentInstance* EquipItem(TSubclassOf<UScWEquipmentDefinition> InDefinition);
 
@@ -139,6 +142,16 @@ public:
 
 	//UPROPERTY(Category = "Equip", BlueprintAssignable)
 	//FScWEquipmentInstanceEventSignature OnUnequippedItem;
+
+protected:
+
+	UPROPERTY(Category = "Equip", EditAnywhere, BlueprintReadOnly)
+	TArray<TSubclassOf<UScWEquipmentDefinition>> InitialEquipment;
+
+private:
+
+	UPROPERTY(Replicated)
+	FScWEquipmentList EquipmentList;
 //~ End Equip
 
 //~ Begin Instances
@@ -164,17 +177,6 @@ public:
 	UFUNCTION(Category = "Instances", BlueprintCallable)
 	MODULE_API TArray<UScWEquipmentInstance*> GetAllInstancesWithDefinitionTag(const FGameplayTag& InTag) const;
 //~ End Instances
-
-//~ Begin Actors
-public:
-
-	UFUNCTION(Category = "Actors", BlueprintCallable)
-	MODULE_API TArray<AActor*> GetAllEquipmentActors() const;
-//~ End Actors
-
-private:
-	UPROPERTY(Replicated)
-	FScWEquipmentList EquipmentList;
 };
 
 #undef MODULE_API

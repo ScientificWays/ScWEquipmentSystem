@@ -22,8 +22,8 @@ class UScWEquipmentFragment_UI : public UScWEquipmentFragment
 public:
 	MODULE_API UScWEquipmentFragment_UI();
 protected:
-	MODULE_API virtual void BP_OnEquipped_Implementation(class UScWEquipmentInstance* InInstance) override; // UScWEquipmentFragment
-	MODULE_API virtual void BP_OnUnequipped_Implementation(class UScWEquipmentInstance* InInstance) override; // UScWEquipmentFragment
+	MODULE_API virtual void BP_OnEquipped_Implementation(class UScWEquipmentInstance* InInstance) const override; // UScWEquipmentFragment
+	MODULE_API virtual void BP_OnUnequipped_Implementation(class UScWEquipmentInstance* InInstance) const override; // UScWEquipmentFragment
 //~ End Initialize
 
 //~ Begin UI
