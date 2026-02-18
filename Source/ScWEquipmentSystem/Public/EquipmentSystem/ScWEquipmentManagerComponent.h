@@ -99,40 +99,57 @@ struct TStructOpsTypeTraits<FScWEquipmentList> : public TStructOpsTypeTraitsBase
 	enum { WithNetDeltaSerializer = true };
 };
 
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FScWEquipmentInstanceEventSignature, UScWEquipmentInstance*, InInstance);
+
 /**
- * Manages equipment applied to a pawn
+ *	Manages equipment applied to a pawn
  */
-UCLASS(MinimalAPI, BlueprintType)
+UCLASS(MinimalAPI, ClassGroup = "EquipmentSystem", BlueprintType, HideCategories = (Object, LOD, Lighting, Transform, Sockets, TextureStreaming), EditInlineNew, meta = (DisplayName = "[ScW] Equipment Manager Component", BlueprintSpawnableComponent))
 class UScWEquipmentManagerComponent : public UPawnComponent
 {
 	GENERATED_BODY()
-
+	
+//~ Begin Initialize
 public:
 	MODULE_API UScWEquipmentManagerComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+protected:
+	virtual void InitializeComponent() override; // UActorComponent
+	virtual void UninitializeComponent() override; // UActorComponent
+	virtual void EndPlay(const EEndPlayReason::Type InEndPlayReason) override; // UActorComponent
+//~ End Initialize
+	
+//~ Begin Replication
+protected:
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // UObject
+	virtual void ReadyForReplication() override; // UActorComponent
+	virtual bool ReplicateSubobjects(class UActorChannel* Channel, class FOutBunch* Bunch, FReplicationFlags* RepFlags) override; // UObject
+//~ End Replication
 
-	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
-	MODULE_API UScWEquipmentInstance* EquipItem(TSubclassOf<UScWEquipmentDefinition> EquipmentDefinition);
+//~ Begin Equip
+public:
 
-	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
-	MODULE_API void UnequipItem(UScWEquipmentInstance* ItemInstance);
+	UFUNCTION(Category = "Equip", BlueprintCallable, BlueprintAuthorityOnly)
+	MODULE_API UScWEquipmentInstance* EquipItem(TSubclassOf<UScWEquipmentDefinition> InDefinition);
 
-	//~UObject interface
-	MODULE_API virtual bool ReplicateSubobjects(class UActorChannel* Channel, class FOutBunch* Bunch, FReplicationFlags* RepFlags) override;
-	//~End of UObject interface
+	UFUNCTION(Category = "Equip", BlueprintCallable, BlueprintAuthorityOnly)
+	MODULE_API void UnequipItem(UScWEquipmentInstance* InInstance);
 
-	//~UActorComponent interface
-	//virtual void EndPlay() override;
-	MODULE_API virtual void InitializeComponent() override;
-	MODULE_API virtual void UninitializeComponent() override;
-	MODULE_API virtual void ReadyForReplication() override;
-	//~End of UActorComponent interface
+	//UPROPERTY(Category = "Equip", BlueprintAssignable)
+	//FScWEquipmentInstanceEventSignature OnEquippedItem;
+
+	//UPROPERTY(Category = "Equip", BlueprintAssignable)
+	//FScWEquipmentInstanceEventSignature OnUnequippedItem;
+//~ End Equip
+
+//~ Begin Instances
+public:
 
 	/** Returns the first equipped instance of a given type, or nullptr if none are found */
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	MODULE_API UScWEquipmentInstance* GetFirstInstanceOfType(TSubclassOf<UScWEquipmentInstance> InstanceType);
+	UFUNCTION(Category = "Instances", BlueprintCallable)
+	MODULE_API UScWEquipmentInstance* GetFirstInstanceOfType(TSubclassOf<UScWEquipmentInstance> InstanceType) const;
 
  	/** Returns all equipped instances of a given type, or an empty array if none are found */
- 	UFUNCTION(BlueprintCallable, BlueprintPure)
+ 	UFUNCTION(Category = "Instances", BlueprintCallable)
 	MODULE_API TArray<UScWEquipmentInstance*> GetEquipmentInstancesOfType(TSubclassOf<UScWEquipmentInstance> InstanceType) const;
 
 	template <typename T>
@@ -141,8 +158,19 @@ public:
 		return (T*)GetFirstInstanceOfType(T::StaticClass());
 	}
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	MODULE_API UScWEquipmentInstance* GetFirstInstanceWithDefinitionTag(const FGameplayTag& InTag);
+	UFUNCTION(Category = "Instances", BlueprintCallable)
+	MODULE_API UScWEquipmentInstance* GetFirstInstanceWithDefinitionTag(const FGameplayTag& InTag) const;
+
+	UFUNCTION(Category = "Instances", BlueprintCallable)
+	MODULE_API TArray<UScWEquipmentInstance*> GetAllInstancesWithDefinitionTag(const FGameplayTag& InTag) const;
+//~ End Instances
+
+//~ Begin Actors
+public:
+
+	UFUNCTION(Category = "Actors", BlueprintCallable)
+	MODULE_API TArray<AActor*> GetAllEquipmentActors() const;
+//~ End Actors
 
 private:
 	UPROPERTY(Replicated)

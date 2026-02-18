@@ -1,18 +1,22 @@
 // Scientific Ways
 
-#include "Equipment/ScWEquipmentFunctionLibrary.h"
+#include "EquipmentSystem/ScWEquipmentFunctionLibrary.h"
 
 #include "Character/ScWCharacterMesh_FirstPerson.h"
 #include "Character/ScWCharacterMesh_ThirdPerson.h"
 
-#include "Equipment/ScWEquipmentInstance.h"
-#include "Equipment/ScWEquipmentAvatarInterface.h"
-#include "Equipment/ScWEquipmentManagerComponent.h"
+#include "EquipmentSystem/ScWEquipmentInstance.h"
+#include "EquipmentSystem/ScWEquipmentAvatarInterface.h"
+#include "EquipmentSystem/ScWEquipmentManagerComponent.h"
 
 //~ Begin Equipment Manager
 UScWEquipmentManagerComponent* UScWEquipmentFunctionLibrary::GetEquipmentManagerComponentFromActor(const AActor* InActor)
 {
-	ensureReturn(InActor, nullptr);
+	if (!InActor)
+	{
+		return nullptr;
+	}
+	//ensureReturn(InActor, nullptr);
 
 	if (InActor->Implements<UScWEquipmentAvatarInterface>())
 	{
@@ -70,3 +74,25 @@ AActor* UScWEquipmentFunctionLibrary::GetOwnerEquipmentActorWithDefinitionTag(co
 	return TagInstance->GetPrimarySpawnedActor();
 }
 //~ End Actors
+
+//~ Begin Abilities
+UScWEquipmentInstance* UScWEquipmentFunctionLibrary::GetAbilityAssociatedEquipment(const UGameplayAbility* InAbility) const
+{
+	ensureReturn(InAbility, nullptr);
+	if (FGameplayAbilitySpec* Spec = InAbility->GetCurrentAbilitySpec())
+	{
+		return Cast<UScWEquipmentInstance>(Spec->SourceObject.Get());
+	}
+	return nullptr;
+}
+
+/*UScWInventoryItemInstance* UScWEquipmentFunctionLibrary::GetAbilityAssociatedItem(const UGameplayAbility* InAbility) const
+{
+	ensureReturn(InAbility, nullptr);
+	if (UScWEquipmentInstance* Equipment = GetAssociatedEquipment(InAbility))
+	{
+		return Cast<UScWInventoryItemInstance>(Equipment->GetInstigator());
+	}
+	return nullptr;
+}*/
+//~ End Abilities

@@ -1,6 +1,6 @@
 // Scientific Ways
 
-#include "Equipment/ScWEquipmentFragment.h"
+#include "EquipmentSystem/ScWEquipmentFragment.h"
 
 UScWEquipmentFragment::UScWEquipmentFragment()
 {

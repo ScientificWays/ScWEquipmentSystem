@@ -21,7 +21,7 @@
 			"LoadingPhase": "Default"
 		}
 	],
-	"Precompiled": false,
+	"Precompiled": true,
 	"Plugins": [
 		{
 			"Name": "GameplayAbilities",

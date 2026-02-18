@@ -1,11 +1,11 @@
 // Scientific Ways
 
-#include "Equipment/ScWEquipmentFragment_FirstPerson.h"
+#include "EquipmentSystem/ScWEquipmentFragment_FirstPerson.h"
 
 #include "Animation/ScWAnimInstance_FirstPerson.h"
 
-#include "Equipment/ScWEquipmentInstance.h"
-#include "Equipment/ScWEquipmentFunctionLibrary.h"
+#include "EquipmentSystem/ScWEquipmentInstance.h"
+#include "EquipmentSystem/ScWEquipmentFunctionLibrary.h"
 
 //~ Begin Initialize
 UScWEquipmentFragment_FirstPerson::UScWEquipmentFragment_FirstPerson()

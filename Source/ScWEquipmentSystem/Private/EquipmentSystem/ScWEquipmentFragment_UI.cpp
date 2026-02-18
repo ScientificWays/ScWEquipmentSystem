@@ -1,8 +1,8 @@
 // Scientific Ways
 
-#include "Equipment/ScWEquipmentFragment_UI.h"
+#include "EquipmentSystem/ScWEquipmentFragment_UI.h"
 
-#include "Equipment/ScWEquipmentInstance.h"
+#include "EquipmentSystem/ScWEquipmentInstance.h"
 
 //~ Begin Initialize
 UScWEquipmentFragment_UI::UScWEquipmentFragment_UI()

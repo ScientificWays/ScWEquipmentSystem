@@ -4,7 +4,7 @@
 
 #include "ScWEquipmentSystem.h"
 
-#include "Equipment/ScWEquipmentFragment.h"
+#include "EquipmentSystem/ScWEquipmentFragment.h"
 
 #include "Animation/ScWTypes_Animation.h"
 

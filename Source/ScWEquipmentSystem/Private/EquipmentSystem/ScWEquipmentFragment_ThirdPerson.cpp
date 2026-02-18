@@ -1,11 +1,11 @@
 // Scientific Ways
 
-#include "Equipment/ScWEquipmentFragment_ThirdPerson.h"
+#include "EquipmentSystem/ScWEquipmentFragment_ThirdPerson.h"
 
 #include "Animation/ScWAnimInstance_ThirdPerson.h"
 
-#include "Equipment/ScWEquipmentInstance.h"
-#include "Equipment/ScWEquipmentFunctionLibrary.h"
+#include "EquipmentSystem/ScWEquipmentInstance.h"
+#include "EquipmentSystem/ScWEquipmentFunctionLibrary.h"
 
 #include "Character/ScWCharacterMesh_ThirdPerson.h"
 

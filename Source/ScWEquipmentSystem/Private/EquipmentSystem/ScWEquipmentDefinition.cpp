@@ -1,10 +1,10 @@
 // Scientific Ways
 
-#include "Equipment/ScWEquipmentDefinition.h"
+#include "EquipmentSystem/ScWEquipmentDefinition.h"
 
-#include "Equipment/ScWEquipmentTags.h"
-#include "Equipment/ScWEquipmentFragment.h"
-#include "Equipment/ScWEquipmentInstance.h"
+#include "Tags/ScWEquipmentTags.h"
+#include "EquipmentSystem/ScWEquipmentFragment.h"
+#include "EquipmentSystem/ScWEquipmentInstance.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(ScWEquipmentDefinition)
 

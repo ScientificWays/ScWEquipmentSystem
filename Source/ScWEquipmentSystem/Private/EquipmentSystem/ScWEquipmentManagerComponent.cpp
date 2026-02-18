@@ -1,11 +1,11 @@
 // Scientific Ways
 
-#include "Equipment/ScWEquipmentManagerComponent.h"
+#include "EquipmentSystem/ScWEquipmentManagerComponent.h"
 
 #include "AbilitySystem/ScWAbilitySystemComponent.h"
 
-#include "Equipment/ScWEquipmentInstance.h"
-#include "Equipment/ScWEquipmentDefinition.h"
+#include "EquipmentSystem/ScWEquipmentInstance.h"
+#include "EquipmentSystem/ScWEquipmentDefinition.h"
 
 #include "Engine/ActorChannel.h"
 #include "AbilitySystemGlobals.h"
@@ -66,24 +66,23 @@ UScWAbilitySystemComponent* FScWEquipmentList::GetAbilitySystemComponent() const
 	return Cast<UScWAbilitySystemComponent>(UAbilitySystemGlobals::GetAbilitySystemComponentFromActor(OwningActor));
 }
 
-UScWEquipmentInstance* FScWEquipmentList::AddEntry(TSubclassOf<UScWEquipmentDefinition> EquipmentDefinition)
+UScWEquipmentInstance* FScWEquipmentList::AddEntry(TSubclassOf<UScWEquipmentDefinition> InDefinition)
 {
 	UScWEquipmentInstance* Result = nullptr;
 
-	check(EquipmentDefinition != nullptr);
+	check(InDefinition != nullptr);
  	check(OwnerComponent);
 	check(OwnerComponent->GetOwner()->HasAuthority());
 	
-	const UScWEquipmentDefinition* EquipmentCDO = GetDefault<UScWEquipmentDefinition>(EquipmentDefinition);
+	const UScWEquipmentDefinition* EquipmentCDO = GetDefault<UScWEquipmentDefinition>(InDefinition);
 
 	TSubclassOf<UScWEquipmentInstance> InstanceType = EquipmentCDO->InstanceType;
 	if (InstanceType == nullptr)
 	{
 		InstanceType = UScWEquipmentInstance::StaticClass();
 	}
-	
 	FScWAppliedEquipmentEntry& NewEntry = Entries.AddDefaulted_GetRef();
-	NewEntry.EquipmentDefinition = EquipmentDefinition;
+	NewEntry.EquipmentDefinition = InDefinition;
 	NewEntry.Instance = NewObject<UScWEquipmentInstance>(OwnerComponent->GetOwner(), InstanceType);  //@TODO: Using the actor instead of component as the outer due to UE-127172
 	NewEntry.Instance->SetEquipmentDefinition(EquipmentCDO);
 	Result = NewEntry.Instance;
@@ -99,12 +98,9 @@ UScWEquipmentInstance* FScWEquipmentList::AddEntry(TSubclassOf<UScWEquipmentDefi
 	{
 		//@TODO: Warning logging?
 	}
-
 	Result->SpawnEquipmentActors(EquipmentCDO->ActorsToSpawn);
 
-
 	MarkItemDirty(NewEntry);
-
 	return Result;
 }
 
@@ -119,10 +115,8 @@ void FScWEquipmentList::RemoveEntry(UScWEquipmentInstance* Instance)
 			{
 				Entry.GrantedHandles.TakeFromAbilitySystem(ASC);
 			}
-
 			Instance->DestroyEquipmentActors();
 			
-
 			EntryIt.RemoveCurrent();
 			MarkArrayDirty();
 		}
@@ -132,6 +126,7 @@ void FScWEquipmentList::RemoveEntry(UScWEquipmentInstance* Instance)
 //////////////////////////////////////////////////////////////////////
 // UScWEquipmentManagerComponent
 
+//~ Begin Initialize
 UScWEquipmentManagerComponent::UScWEquipmentManagerComponent(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 	, EquipmentList(this)
@@ -140,69 +135,12 @@ UScWEquipmentManagerComponent::UScWEquipmentManagerComponent(const FObjectInitia
 	bWantsInitializeComponent = true;
 }
 
-void UScWEquipmentManagerComponent::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(ThisClass, EquipmentList);
-}
-
-UScWEquipmentInstance* UScWEquipmentManagerComponent::EquipItem(TSubclassOf<UScWEquipmentDefinition> EquipmentClass)
-{
-	UScWEquipmentInstance* Result = nullptr;
-	if (EquipmentClass != nullptr)
-	{
-		Result = EquipmentList.AddEntry(EquipmentClass);
-		if (Result != nullptr)
-		{
-			Result->OnEquipped();
-
-			if (IsUsingRegisteredSubObjectList() && IsReadyForReplication())
-			{
-				AddReplicatedSubObject(Result);
-			}
-		}
-	}
-	return Result;
-}
-
-void UScWEquipmentManagerComponent::UnequipItem(UScWEquipmentInstance* ItemInstance)
-{
-	if (ItemInstance != nullptr)
-	{
-		if (IsUsingRegisteredSubObjectList())
-		{
-			RemoveReplicatedSubObject(ItemInstance);
-		}
-
-		ItemInstance->OnUnequipped();
-		EquipmentList.RemoveEntry(ItemInstance);
-	}
-}
-
-bool UScWEquipmentManagerComponent::ReplicateSubobjects(UActorChannel* Channel, class FOutBunch* Bunch, FReplicationFlags* RepFlags)
-{
-	bool WroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
-
-	for (FScWAppliedEquipmentEntry& Entry : EquipmentList.Entries)
-	{
-		UScWEquipmentInstance* Instance = Entry.Instance;
-
-		if (IsValid(Instance))
-		{
-			WroteSomething |= Channel->ReplicateSubobject(Instance, *Bunch, *RepFlags);
-		}
-	}
-
-	return WroteSomething;
-}
-
-void UScWEquipmentManagerComponent::InitializeComponent()
+void UScWEquipmentManagerComponent::InitializeComponent() // UActorComponent
 {
 	Super::InitializeComponent();
 }
 
-void UScWEquipmentManagerComponent::UninitializeComponent()
+void UScWEquipmentManagerComponent::UninitializeComponent() // UActorComponent
 {
 	TArray<UScWEquipmentInstance*> AllEquipmentInstances;
 
@@ -220,7 +158,23 @@ void UScWEquipmentManagerComponent::UninitializeComponent()
 	Super::UninitializeComponent();
 }
 
-void UScWEquipmentManagerComponent::ReadyForReplication()
+void UScWEquipmentManagerComponent::EndPlay(const EEndPlayReason::Type InEndPlayReason) // UActorComponent
+{
+	Super::EndPlay(InEndPlayReason);
+
+
+}
+//~ End Initialize
+
+//~ Begin Replication
+void UScWEquipmentManagerComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const // UObject
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ThisClass, EquipmentList);
+}
+
+void UScWEquipmentManagerComponent::ReadyForReplication() // UActorComponent
 {
 	Super::ReadyForReplication();
 
@@ -239,9 +193,60 @@ void UScWEquipmentManagerComponent::ReadyForReplication()
 	}
 }
 
-UScWEquipmentInstance* UScWEquipmentManagerComponent::GetFirstInstanceOfType(TSubclassOf<UScWEquipmentInstance> InstanceType)
+bool UScWEquipmentManagerComponent::ReplicateSubobjects(UActorChannel* Channel, class FOutBunch* Bunch, FReplicationFlags* RepFlags) // UObject
 {
+	bool WroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+
 	for (FScWAppliedEquipmentEntry& Entry : EquipmentList.Entries)
+	{
+		UScWEquipmentInstance* Instance = Entry.Instance;
+
+		if (IsValid(Instance))
+		{
+			WroteSomething |= Channel->ReplicateSubobject(Instance, *Bunch, *RepFlags);
+		}
+	}
+	return WroteSomething;
+}
+//~ End Replication
+
+//~ Begin Equip
+UScWEquipmentInstance* UScWEquipmentManagerComponent::EquipItem(TSubclassOf<UScWEquipmentDefinition> InDefinition)
+{
+	ensureReturn(InDefinition, nullptr);
+
+	UScWEquipmentInstance* NewInstance = EquipmentList.AddEntry(InDefinition);
+	ensureReturn(NewInstance, nullptr);
+
+	NewInstance->OnEquipped();
+
+	if (IsUsingRegisteredSubObjectList() && IsReadyForReplication())
+	{
+		AddReplicatedSubObject(NewInstance);
+	}
+	//OnEquippedItem.Broadcast(NewInstance);
+	return NewInstance;
+}
+
+void UScWEquipmentManagerComponent::UnequipItem(UScWEquipmentInstance* InInstance)
+{
+	ensureReturn(InInstance);
+
+	if (IsUsingRegisteredSubObjectList())
+	{
+		RemoveReplicatedSubObject(InInstance);
+	}
+	InInstance->OnUnequipped();
+	EquipmentList.RemoveEntry(InInstance);
+
+	//OnUnequippedItem.Broadcast(InInstance);
+}
+//~ End Equip
+
+//~ Begin Instances
+UScWEquipmentInstance* UScWEquipmentManagerComponent::GetFirstInstanceOfType(TSubclassOf<UScWEquipmentInstance> InstanceType) const
+{
+	for (const FScWAppliedEquipmentEntry& Entry : EquipmentList.Entries)
 	{
 		if (UScWEquipmentInstance* Instance = Entry.Instance)
 		{
@@ -270,12 +275,13 @@ TArray<UScWEquipmentInstance*> UScWEquipmentManagerComponent::GetEquipmentInstan
 	return Results;
 }
 
-UScWEquipmentInstance* UScWEquipmentManagerComponent::GetFirstInstanceWithDefinitionTag(const FGameplayTag& InTag)
+UScWEquipmentInstance* UScWEquipmentManagerComponent::GetFirstInstanceWithDefinitionTag(const FGameplayTag& InTag) const
 {
-	for (FScWAppliedEquipmentEntry& Entry : EquipmentList.Entries)
+	for (const FScWAppliedEquipmentEntry& Entry : EquipmentList.Entries)
 	{
 		ensureContinue(Entry.Instance);
 		ensureContinue(Entry.Instance->GetEquipmentDefinition());
+
 		if (Entry.Instance->GetEquipmentDefinition()->TypeTag == InTag)
 		{
 			return Entry.Instance;
@@ -283,3 +289,37 @@ UScWEquipmentInstance* UScWEquipmentManagerComponent::GetFirstInstanceWithDefini
 	}
 	return nullptr;
 }
+
+TArray<UScWEquipmentInstance*> UScWEquipmentManagerComponent::GetAllInstancesWithDefinitionTag(const FGameplayTag& InTag) const
+{
+	TArray<UScWEquipmentInstance*> OutInstances;
+
+	for (const FScWAppliedEquipmentEntry& Entry : EquipmentList.Entries)
+	{
+		ensureContinue(Entry.Instance);
+		ensureContinue(Entry.Instance->GetEquipmentDefinition());
+
+		if (Entry.Instance->GetEquipmentDefinition()->TypeTag == InTag)
+		{
+			OutInstances.Add(Entry.Instance);
+		}
+	}
+	return OutInstances;
+}
+//~ End Instances
+
+//~ Begin Actors
+TArray<AActor*> UScWEquipmentManagerComponent::GetAllEquipmentActors() const
+{
+	TArray<AActor*> OutActors;
+
+	for (const FScWAppliedEquipmentEntry& Entry : EquipmentList.Entries)
+	{
+		ensureContinue(Entry.Instance);
+		ensureContinue(Entry.Instance->GetEquipmentDefinition());
+
+		OutActors.Append(Entry.Instance->GetSpawnedActors());
+	}
+	return OutActors;
+}
+//~ End Actors

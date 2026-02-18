@@ -11,6 +11,16 @@ class APawn;
 class UScWEquipmentDefinition;
 struct FFrame;
 struct FScWEquipmentActorToSpawn;
+class UScWEquipmentManagerComponent;
+
+USTRUCT(BlueprintType)
+struct FGameplayMessage_EquipmentInstance
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<class UScWEquipmentInstance> EquipmentInstance;
+};
 
 /**
  *	A piece of equipment spawned and applied to a pawn
@@ -21,12 +31,13 @@ class UScWEquipmentInstance : public UObject
 	GENERATED_BODY()
 
 public:
-	UScWEquipmentInstance(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+	UScWEquipmentInstance(const FObjectInitializer& InObjectInitializer = FObjectInitializer::Get());
 
-	//~UObject interface
-	virtual bool IsSupportedForNetworking() const override { return true; }
-	virtual UWorld* GetWorld() const override final;
-	//~End of UObject interface
+	virtual bool IsSupportedForNetworking() const override { return true; } // UObject
+	virtual UWorld* GetWorld() const override final; // UObject
+
+	UFUNCTION(BlueprintPure, Category = "Equipment")
+	UScWEquipmentManagerComponent* GetOwningEquipmentManagerComponent() const;
 
 	UFUNCTION(BlueprintPure, Category = "Equipment")
 	UObject* GetInstigator() const { return Instigator; }
@@ -60,10 +71,10 @@ protected:
 	virtual void RegisterReplicationFragments(UE::Net::FFragmentRegistrationContext& Context, UE::Net::EFragmentRegistrationFlags RegistrationFlags) override;
 #endif // UE_WITH_IRIS
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "Equipment", meta=(DisplayName="OnEquipped"))
+	UFUNCTION(BlueprintImplementableEvent, Category = "Equipment", meta = (DisplayName="OnEquipped"))
 	void K2_OnEquipped();
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "Equipment", meta=(DisplayName="OnUnequipped"))
+	UFUNCTION(BlueprintImplementableEvent, Category = "Equipment", meta = (DisplayName="OnUnequipped"))
 	void K2_OnUnequipped();
 
 private:

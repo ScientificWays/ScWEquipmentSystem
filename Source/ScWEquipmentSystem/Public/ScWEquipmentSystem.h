@@ -10,10 +10,6 @@
 #include "Kismet/KismetSystemLibrary.h"
 
 #include "GameFramework/Actor.h"
-
-#include "NiagaraSystem.h"
-#include "NiagaraComponent.h"
-#include "NiagaraFunctionLibrary.h"
 #include "Components/PawnComponent.h"
 
 #include "GameplayEffect.h"

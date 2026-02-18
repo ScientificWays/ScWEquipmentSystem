@@ -1,8 +1,8 @@
 // Scientific Ways
 
-#include "Equipment/ScWEquipmentFragment_Drop.h"
+#include "EquipmentSystem/ScWEquipmentFragment_Drop.h"
 
-#include "Equipment/ScWEquipmentInstance.h"
+#include "EquipmentSystem/ScWEquipmentInstance.h"
 
 //~ Begin Initialize
 UScWEquipmentFragment_Drop::UScWEquipmentFragment_Drop()

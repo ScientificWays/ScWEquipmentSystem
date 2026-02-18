@@ -10,10 +10,13 @@
 
 namespace FScWEquipmentTags
 {
-	MODULE_API FGameplayTag FindTagByString(const FString& TagString, bool bMatchPartialString = false);
-
 	// Equipment Types
 	MODULE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Equipment_Type_Weapon);
+
+	// Messages
+	MODULE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayMessage_Equipment);
+	MODULE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayMessage_Equipment_InstanceEquipped);
+	MODULE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayMessage_Equipment_InstanceUnequipped);
 }
 
 #undef MODULE_API

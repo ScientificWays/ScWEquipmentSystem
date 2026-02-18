@@ -1,12 +1,17 @@
 // Scientific Ways
 
-#include "Equipment/ScWEquipmentInstance.h"
+#include "EquipmentSystem/ScWEquipmentInstance.h"
 
-#include "Equipment/ScWEquipmentDefinition.h"
+#include "Tags/ScWEquipmentTags.h"
+#include "EquipmentSystem/ScWEquipmentDefinition.h"
+#include "EquipmentSystem/ScWEquipmentFunctionLibrary.h"
+#include "EquipmentSystem/ScWEquipmentManagerComponent.h"
 
 #include "Net/UnrealNetwork.h"
 #include "GameFramework/Character.h"
 #include "Components/SkeletalMeshComponent.h"
+
+#include "GameFramework/GameplayMessageSubsystem.h"
 
 #if UE_WITH_IRIS
 #include "Iris/ReplicationSystem/ReplicationFragmentUtil.h"
@@ -18,9 +23,10 @@ class FLifetimeProperty;
 class UClass;
 class USceneComponent;
 
-UScWEquipmentInstance::UScWEquipmentInstance(const FObjectInitializer& ObjectInitializer)
-	: Super(ObjectInitializer)
+UScWEquipmentInstance::UScWEquipmentInstance(const FObjectInitializer& InObjectInitializer)
+	: Super(InObjectInitializer)
 {
+
 }
 
 UWorld* UScWEquipmentInstance::GetWorld() const
@@ -53,6 +59,13 @@ void UScWEquipmentInstance::RegisterReplicationFragments(UE::Net::FFragmentRegis
 }
 #endif // UE_WITH_IRIS
 
+UScWEquipmentManagerComponent* UScWEquipmentInstance::GetOwningEquipmentManagerComponent() const
+{
+	AActor* OuterActor = Cast<AActor>(GetOuter());
+	ensureReturn(OuterActor, nullptr);
+	return UScWEquipmentFunctionLibrary::GetEquipmentManagerComponentFromActor(OuterActor);
+}
+
 APawn* UScWEquipmentInstance::GetPawn() const
 {
 	return Cast<APawn>(GetOuter());
@@ -80,7 +93,6 @@ void UScWEquipmentInstance::SpawnEquipmentActors(const TArray<FScWEquipmentActor
 		{
 			AttachTarget = Char->GetMesh();
 		}
-
 		for (const FScWEquipmentActorToSpawn& SpawnInfo : ActorsToSpawn)
 		{
 			AActor* NewActor = GetWorld()->SpawnActorDeferred<AActor>(SpawnInfo.ActorToSpawn, FTransform::Identity, OwningPawn);
@@ -107,11 +119,19 @@ void UScWEquipmentInstance::DestroyEquipmentActors()
 void UScWEquipmentInstance::OnEquipped()
 {
 	K2_OnEquipped();
+
+	UGameplayMessageSubsystem& GameplayMessageSubsystem = UGameplayMessageSubsystem::Get(this);
+	FGameplayMessage_EquipmentInstance EquippedMessage = { this };
+	GameplayMessageSubsystem.BroadcastMessage(FScWEquipmentTags::GameplayMessage_Equipment_InstanceEquipped, EquippedMessage);
 }
 
 void UScWEquipmentInstance::OnUnequipped()
 {
 	K2_OnUnequipped();
+
+	UGameplayMessageSubsystem& GameplayMessageSubsystem = UGameplayMessageSubsystem::Get(this);
+	FGameplayMessage_EquipmentInstance UnequippedMessage = { this };
+	GameplayMessageSubsystem.BroadcastMessage(FScWEquipmentTags::GameplayMessage_Equipment_InstanceUnequipped, UnequippedMessage);
 }
 
 void UScWEquipmentInstance::OnRep_Instigator()
