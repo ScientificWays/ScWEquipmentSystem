@@ -13,7 +13,7 @@ class UScWEquipmentInstance;
 /**
  *
  */
-UCLASS(MinimalAPI, Const, Abstract, Blueprintable, BlueprintType, DefaultToInstanced, EditInlineNew, meta = (DisplayName = "[ScW] Handheld Fragment Base"))
+UCLASS(MinimalAPI, Const, Abstract, Blueprintable, BlueprintType, DefaultToInstanced, EditInlineNew, meta = (DisplayName = "[ScW] Equipment Fragment Base"))
 class UScWEquipmentFragment : public UObject
 {
 	GENERATED_BODY()

@@ -147,10 +147,11 @@ void UScWEquipmentManagerComponent::BeginPlay() // UActorComponent
 	ensureReturn(GetOwner());
 	if (GetOwner()->HasAuthority())
 	{
-		for (const auto& SampleDefinition : InitialEquipment)
+		/*for (const auto& SampleDefinition : InitialEquipment)
 		{
+			ensureContinue(SampleDefinition);
 			EquipItem(SampleDefinition);
-		}
+		}*/
 	}
 }
 

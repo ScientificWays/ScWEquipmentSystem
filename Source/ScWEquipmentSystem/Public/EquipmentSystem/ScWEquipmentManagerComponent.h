@@ -145,8 +145,8 @@ public:
 
 protected:
 
-	UPROPERTY(Category = "Equip", EditAnywhere, BlueprintReadOnly)
-	TArray<TSubclassOf<UScWEquipmentDefinition>> InitialEquipment;
+	//UPROPERTY(Category = "Equip", EditAnywhere, BlueprintReadOnly)
+	//TArray<TSubclassOf<UScWEquipmentDefinition>> InitialEquipment;
 
 private:
 

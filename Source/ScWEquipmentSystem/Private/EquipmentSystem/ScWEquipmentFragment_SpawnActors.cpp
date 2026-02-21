@@ -87,7 +87,7 @@ void UScWEquipmentFragment_SpawnActors::BP_OnEquipped_Implementation(UScWEquipme
 		USceneComponent* AttachTarget = GetAttachmentForActor(InInstance, SpawnInfo);
 		ensureContinue(AttachTarget);
 
-		AActor* NewActor = World->SpawnActorDeferred<AActor>(SpawnInfo.ActorToSpawn, FTransform::Identity, OwningPawn, OwningPawn);
+		AActor* NewActor = World->SpawnActorDeferred<AActor>(SpawnInfo.ActorToSpawn, FTransform::Identity, OwningPawn, OwningPawn, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 		NewActor->FinishSpawning(FTransform::Identity, /*bIsDefaultTransform=*/ true);
 		NewActor->SetActorRelativeTransform(SpawnInfo.AttachTransform);
 

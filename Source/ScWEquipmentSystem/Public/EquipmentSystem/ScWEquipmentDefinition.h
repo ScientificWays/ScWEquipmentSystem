@@ -22,7 +22,11 @@ class UScWEquipmentDefinition : public UObject
 public:
 	UScWEquipmentDefinition(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	UFUNCTION(BlueprintPure, Category = "Equipment", meta = (DeterminesOutputType = "InTypeClass"))
+	// Tag used to define equipment general type (e.g. Weapon)
+	UPROPERTY(Category = "Equipment", EditDefaultsOnly)
+	FGameplayTag TypeTag;
+
+	UFUNCTION(Category = "Equipment", BlueprintCallable, meta = (DeterminesOutputType = "InTypeClass"))
 	const UScWEquipmentFragment* GetFragmentByClass(TSubclassOf<UScWEquipmentFragment> InTypeClass) const;
 
 	template<class T>
@@ -30,10 +34,6 @@ public:
 	{
 		return Cast<T>(GetFragmentByClass(T::StaticClass()));
 	}
-
-	// Tag used to define equipment general type (e.g. Weapon)
-	UPROPERTY(Category = "Equipment", EditDefaultsOnly)
-	FGameplayTag TypeTag;
 
 	// Actors to spawn on the pawn when this is equipped
 	UPROPERTY(Category = "Equipment", EditDefaultsOnly, Instanced)
