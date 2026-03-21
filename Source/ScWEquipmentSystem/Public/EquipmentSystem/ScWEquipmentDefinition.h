@@ -20,7 +20,7 @@ class UScWEquipmentDefinition : public UObject
 	GENERATED_BODY()
 
 public:
-	UScWEquipmentDefinition(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+	UScWEquipmentDefinition(const FObjectInitializer& InObjectInitializer = FObjectInitializer::Get());
 
 	// Tag used to define equipment general type (e.g. Weapon)
 	UPROPERTY(Category = "Equipment", EditDefaultsOnly)

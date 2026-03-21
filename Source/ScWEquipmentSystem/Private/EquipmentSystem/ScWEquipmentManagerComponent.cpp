@@ -42,9 +42,13 @@ void FScWEquipmentList::PostReplicatedAdd(const TArrayView<int32> AddedIndices, 
 {
 	for (int32 Index : AddedIndices)
 	{
-		const FScWAppliedEquipmentEntry& Entry = Entries[Index];
+		FScWAppliedEquipmentEntry& Entry = Entries[Index];
 		if (Entry.Instance != nullptr)
 		{
+			if (Entry.DefinitionClass != nullptr)
+			{
+				Entry.Instance->SetEquipmentDefinition(GetDefault<UScWEquipmentDefinition>(Entry.DefinitionClass));
+			}
 			Entry.Instance->OnEquipped();
 		}
 	}
@@ -52,11 +56,18 @@ void FScWEquipmentList::PostReplicatedAdd(const TArrayView<int32> AddedIndices, 
 
 void FScWEquipmentList::PostReplicatedChange(const TArrayView<int32> ChangedIndices, int32 FinalSize)
 {
-// 	for (int32 Index : ChangedIndices)
-// 	{
-// 		const FGameplayTagStack& Stack = Stacks[Index];
-// 		TagToCountMap[Stack.Tag] = Stack.StackCount;
-// 	}
+	for (int32 Index : ChangedIndices)
+	{
+		FScWAppliedEquipmentEntry& Entry = Entries[Index];
+		if (Entry.Instance != nullptr)
+		{
+			if (Entry.DefinitionClass != nullptr)
+			{
+				Entry.Instance->SetEquipmentDefinition(GetDefault<UScWEquipmentDefinition>(Entry.DefinitionClass));
+			}
+			Entry.Instance->OnEquipped();
+		}
+	}
 }
 
 UScWAbilitySystemComponent* FScWEquipmentList::GetAbilitySystemComponent() const
@@ -109,8 +120,8 @@ void FScWEquipmentList::RemoveEntry(UScWEquipmentInstance* Instance)
 // UScWEquipmentManagerComponent
 
 //~ Begin Initialize
-UScWEquipmentManagerComponent::UScWEquipmentManagerComponent(const FObjectInitializer& ObjectInitializer)
-	: Super(ObjectInitializer)
+UScWEquipmentManagerComponent::UScWEquipmentManagerComponent(const FObjectInitializer& InObjectInitializer)
+	: Super(InObjectInitializer)
 	//, EquipmentList(this)
 {
 	SetIsReplicatedByDefault(true);

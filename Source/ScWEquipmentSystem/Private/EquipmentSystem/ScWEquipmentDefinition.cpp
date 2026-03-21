@@ -8,8 +8,8 @@
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(ScWEquipmentDefinition)
 
-UScWEquipmentDefinition::UScWEquipmentDefinition(const FObjectInitializer& ObjectInitializer)
-	: Super(ObjectInitializer)
+UScWEquipmentDefinition::UScWEquipmentDefinition(const FObjectInitializer& InObjectInitializer)
+	: Super(InObjectInitializer)
 {
 	TypeTag = FScWEquipmentTags::Equipment_Type_Weapon;
 	InstanceType = UScWEquipmentInstance::StaticClass();

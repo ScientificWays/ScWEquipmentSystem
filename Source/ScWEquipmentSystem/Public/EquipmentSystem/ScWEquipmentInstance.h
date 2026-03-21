@@ -70,6 +70,8 @@ protected:
 	void BP_OnUnequipped();
 
 private:
+	void TryApplyEquipmentState();
+	void TryRemoveEquipmentState();
 
 	UPROPERTY(ReplicatedUsing = "OnRep_Instigator")
 	TObjectPtr<UObject> Instigator;
@@ -82,4 +84,7 @@ private:
 
 	UFUNCTION()
 	void OnRep_EquipmentDefinition();
+
+	bool bIsEquipped = false;
+	bool bHasAppliedEquipmentState = false;
 };

@@ -46,6 +46,7 @@ void UScWEquipmentInstance::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ThisClass, Instigator);
+	DOREPLIFETIME(ThisClass, EquipmentDefinition);
 }
 
 #if UE_WITH_IRIS
@@ -85,6 +86,23 @@ APawn* UScWEquipmentInstance::GetTypedPawn(TSubclassOf<APawn> PawnType) const
 
 void UScWEquipmentInstance::OnEquipped()
 {
+	bIsEquipped = true;
+	TryApplyEquipmentState();
+}
+
+void UScWEquipmentInstance::OnUnequipped()
+{
+	bIsEquipped = false;
+	TryRemoveEquipmentState();
+}
+
+void UScWEquipmentInstance::TryApplyEquipmentState()
+{
+	if (!bIsEquipped || bHasAppliedEquipmentState)
+	{
+		return;
+	}
+
 	ensureReturn(EquipmentDefinition);
 	for (const UScWEquipmentFragment* SampleFragment : EquipmentDefinition->Fragments)
 	{
@@ -92,21 +110,33 @@ void UScWEquipmentInstance::OnEquipped()
 		SampleFragment->BP_OnEquipped(this);
 	}
 	BP_OnEquipped();
+	bHasAppliedEquipmentState = true;
 
 	UGameplayMessageSubsystem& GameplayMessageSubsystem = UGameplayMessageSubsystem::Get(this);
 	FGameplayMessage_EquipmentInstance EquippedMessage = { this };
 	GameplayMessageSubsystem.BroadcastMessage(FScWEquipmentTags::GameplayMessage_Equipment_InstanceEquipped, EquippedMessage);
 }
 
-void UScWEquipmentInstance::OnUnequipped()
+void UScWEquipmentInstance::TryRemoveEquipmentState()
 {
-	ensureReturn(EquipmentDefinition);
+	if (!bHasAppliedEquipmentState)
+	{
+		return;
+	}
+
+	if (!ensure(EquipmentDefinition))
+	{
+		bHasAppliedEquipmentState = false;
+		return;
+	}
+
 	for (const UScWEquipmentFragment* SampleFragment : EquipmentDefinition->Fragments)
 	{
 		ensureContinue(SampleFragment);
 		SampleFragment->BP_OnUnequipped(this);
 	}
 	BP_OnUnequipped();
+	bHasAppliedEquipmentState = false;
 
 	UGameplayMessageSubsystem& GameplayMessageSubsystem = UGameplayMessageSubsystem::Get(this);
 	FGameplayMessage_EquipmentInstance UnequippedMessage = { this };
@@ -120,5 +150,5 @@ void UScWEquipmentInstance::OnRep_Instigator()
 
 void UScWEquipmentInstance::OnRep_EquipmentDefinition()
 {
-
+	TryApplyEquipmentState();
 }

@@ -110,7 +110,7 @@ class UScWEquipmentManagerComponent : public UPawnComponent
 	
 //~ Begin Initialize
 public:
-	MODULE_API UScWEquipmentManagerComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+	MODULE_API UScWEquipmentManagerComponent(const FObjectInitializer& InObjectInitializer = FObjectInitializer::Get());
 protected:
 	virtual void InitializeComponent() override; // UActorComponent
 	virtual void UninitializeComponent() override; // UActorComponent
