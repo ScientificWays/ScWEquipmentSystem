@@ -12,6 +12,9 @@
 
 #define MODULE_API SCWEQUIPMENTSYSTEM_API
 
+/**
+ *	Selects which avatar mesh or custom attachment point spawned equipment actors should use.
+ */
 UENUM(BlueprintType)
 enum class EScWEquipmentMesh : uint8
 {
@@ -20,6 +23,9 @@ enum class EScWEquipmentMesh : uint8
 	Custom = 2,
 };
 
+/**
+ *	Describes a single actor that should be spawned and attached while equipment is active.
+ */
 USTRUCT(BlueprintType)
 struct FScWEquipmentActorToSpawn
 {
@@ -41,6 +47,9 @@ struct FScWEquipmentActorToSpawn
 	bool bIgnoreAttachTargetScale = true;
 };
 
+/**
+ *	Stores transient spawned-actor state for a single equipment instance.
+ */
 USTRUCT()
 struct FScWSpawnActorsMemory
 {
@@ -51,7 +60,7 @@ struct FScWSpawnActorsMemory
 };
 
 /**
- *
+ *	Spawns and cleans up attached actors while an equipment instance is equipped.
  */
 UCLASS(MinimalAPI, Blueprintable, BlueprintType, meta = (DisplayName = "[ScW] Equipment Fragment (Spawn Actors)"))
 class UScWEquipmentFragment_SpawnActors : public UScWEquipmentFragment

@@ -11,7 +11,7 @@
 #define MODULE_API SCWEQUIPMENTSYSTEM_API
 
 /**
- *
+ *	Stores drop-related rules for an equipment instance.
  */
 UCLASS(MinimalAPI, Blueprintable, BlueprintType, meta = (DisplayName = "[ScW] Equipment Fragment (Drop)"))
 class UScWEquipmentFragment_Drop : public UScWEquipmentFragment

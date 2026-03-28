@@ -13,6 +13,9 @@ struct FFrame;
 struct FScWEquipmentActorToSpawn;
 class UScWEquipmentManagerComponent;
 
+/**
+ *	Published when an equipment instance is equipped or unequipped.
+ */
 USTRUCT(BlueprintType)
 struct FGameplayMessage_EquipmentInstance
 {
@@ -23,7 +26,8 @@ struct FGameplayMessage_EquipmentInstance
 };
 
 /**
- *	A piece of equipment spawned and applied to a pawn
+ *	Represents a runtime equipment instance applied to a pawn.
+ *	It owns equip and unequip state and forwards lifecycle events to equipment fragments.
  */
 UCLASS(BlueprintType, Blueprintable, meta = (DisplayName = "[ScW] Equipment Instance"))
 class UScWEquipmentInstance : public UObject

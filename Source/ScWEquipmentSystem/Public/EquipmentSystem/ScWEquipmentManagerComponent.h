@@ -19,7 +19,9 @@ struct FScWEquipmentList;
 struct FNetDeltaSerializeInfo;
 struct FReplicationFlags;
 
-/** A single piece of applied equipment */
+/**
+ *	Represents one applied equipment definition and its spawned runtime instance.
+ */
 USTRUCT(BlueprintType)
 struct FScWAppliedEquipmentEntry : public FFastArraySerializerItem
 {
@@ -45,7 +47,9 @@ private:
 	TObjectPtr<UScWEquipmentInstance> Instance = nullptr;
 };
 
-/** List of applied equipment */
+/**
+ *	Replicated fast-array container for equipped instances owned by a manager component.
+ */
 USTRUCT(BlueprintType)
 struct FScWEquipmentList : public FFastArraySerializer
 {
@@ -101,7 +105,7 @@ struct TStructOpsTypeTraits<FScWEquipmentList> : public TStructOpsTypeTraitsBase
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FScWEquipmentInstanceEventSignature, UScWEquipmentInstance*, InInstance);
 
 /**
- *	Manages equipment applied to a pawn
+ *	Manages equipment instances applied to a pawn, including equip lifecycle and replication.
  */
 UCLASS(MinimalAPI, ClassGroup = "EquipmentSystem", BlueprintType, HideCategories = (Object, LOD, Lighting, Transform, Sockets, TextureStreaming), EditInlineNew, meta = (DisplayName = "[ScW] Equipment Manager Component", BlueprintSpawnableComponent))
 class UScWEquipmentManagerComponent : public UPawnComponent

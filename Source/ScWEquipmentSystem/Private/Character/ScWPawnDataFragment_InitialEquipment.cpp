@@ -8,8 +8,10 @@
 #include "EquipmentSystem/ScWEquipmentFunctionLibrary.h"
 #include "EquipmentSystem/ScWEquipmentManagerComponent.h"
 
+#include UE_INLINE_GENERATED_CPP_BY_NAME(ScWPawnDataFragment_InitialEquipment)
+
 //~ Begin Initialize
-UScWPawnDataFragment_InitialEquipment::UScWPawnDataFragment_InitialEquipment()
+UScWPawnDataFragment_InitialEquipment::UScWPawnDataFragment_InitialEquipment(const FObjectInitializer& InObjectInitializer)
 {
 	
 }

@@ -13,7 +13,7 @@
 #define MODULE_API SCWEQUIPMENTSYSTEM_API
 
 /**
- *
+ *	Grants and removes ability sets while an equipment instance is equipped.
  */
 UCLASS(MinimalAPI, Blueprintable, BlueprintType, meta = (DisplayName = "[ScW] Equipment Fragment (Ability Sets)"))
 class UScWEquipmentFragment_AbilitySets : public UScWEquipmentFragment

@@ -12,9 +12,10 @@ class UScWEquipmentFragment;
 class UScWEquipmentInstance;
 
 /**
- *	Definition of a piece of equipment that can be applied to a pawn
+ *	Defines a piece of equipment that can be applied to a pawn.
+ *	It stores the equipment type, fragments, and runtime instance class.
  */
-UCLASS(Const, Abstract, Blueprintable, BlueprintType)
+UCLASS(Const, Abstract, Blueprintable, BlueprintType, meta = (DisplayName = "[ScW] Equipment Definition"))
 class UScWEquipmentDefinition : public UObject
 {
 	GENERATED_BODY()

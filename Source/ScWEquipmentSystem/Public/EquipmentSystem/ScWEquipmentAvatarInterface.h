@@ -11,7 +11,9 @@
 class USkeletalMeshComponent;
 class UScWEquipmentManagerComponent;
 
-// This class does not need to be modified.
+/**
+ *	Implemented by pawns or avatars that expose equipment meshes and a manager component.
+ */
 UINTERFACE(MinimalAPI, BlueprintType)
 class UScWEquipmentAvatarInterface : public UInterface
 {
@@ -19,7 +21,7 @@ class UScWEquipmentAvatarInterface : public UInterface
 };
 
 /**
- * 
+ *	Provides access to the equipment manager and avatar meshes used by equipment systems.
  */
 class IScWEquipmentAvatarInterface
 {

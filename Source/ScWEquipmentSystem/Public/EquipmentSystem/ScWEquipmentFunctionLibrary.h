@@ -9,9 +9,9 @@
 #define MODULE_API SCWEQUIPMENTSYSTEM_API
 
 /**
- * 
+ *	Blueprint helper library for querying equipment managers, meshes, and ability associations.
  */
-UCLASS(MinimalAPI, meta = (DisplayName = "[ScW] Gameplay Function Library"))
+UCLASS(MinimalAPI, meta = (DisplayName = "[ScW] Equipment Function Library"))
 class UScWEquipmentFunctionLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()

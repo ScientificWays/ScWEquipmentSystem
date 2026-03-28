@@ -9,6 +9,8 @@
 #include "EquipmentSystem/ScWEquipmentAvatarInterface.h"
 #include "EquipmentSystem/ScWEquipmentManagerComponent.h"
 
+#include UE_INLINE_GENERATED_CPP_BY_NAME(ScWEquipmentFunctionLibrary)
+
 //~ Begin Equipment Manager
 UScWEquipmentManagerComponent* UScWEquipmentFunctionLibrary::GetEquipmentManagerComponentFromActor(const AActor* InActor)
 {

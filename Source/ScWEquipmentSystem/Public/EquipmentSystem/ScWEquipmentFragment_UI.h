@@ -11,7 +11,7 @@
 #define MODULE_API SCWEQUIPMENTSYSTEM_API
 
 /**
- *
+ *	Provides user-facing presentation data for an equipment instance.
  */
 UCLASS(MinimalAPI, Blueprintable, BlueprintType, meta = (DisplayName = "[ScW] Equipment Fragment (UI)"))
 class UScWEquipmentFragment_UI : public UScWEquipmentFragment

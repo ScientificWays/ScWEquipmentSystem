@@ -12,7 +12,7 @@
 #define MODULE_API SCWEQUIPMENTSYSTEM_API
 
 /**
- *
+ *	Applies first-person and third-person static animation data for equipped items.
  */
 UCLASS(MinimalAPI, Const, Blueprintable, BlueprintType, meta = (DisplayName = "[ScW] Equipment Fragment (Animations)"))
 class UScWEquipmentFragment_Animations : public UScWEquipmentFragment

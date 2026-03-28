@@ -8,10 +8,11 @@
 #include "EquipmentSystem/ScWEquipmentInstance.h"
 #include "EquipmentSystem/ScWEquipmentFunctionLibrary.h"
 
+#include UE_INLINE_GENERATED_CPP_BY_NAME(ScWEquipmentFragment_Animations)
+
 //~ Begin Initialize
 UScWEquipmentFragment_Animations::UScWEquipmentFragment_Animations()
 {
-	
 }
 
 void UScWEquipmentFragment_Animations::BP_OnEquipped_Implementation(UScWEquipmentInstance* InInstance) const // UScWEquipmentFragment

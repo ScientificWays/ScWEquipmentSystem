@@ -10,7 +10,9 @@
 
 class UScWEquipmentInstance;
 
-// This class does not need to be modified.
+/**
+ *	Implemented by spawned equipment actors that need initialization from an equipment instance.
+ */
 UINTERFACE(MinimalAPI, BlueprintType)
 class UScWEquipmentActorInterface : public UInterface
 {
@@ -18,7 +20,7 @@ class UScWEquipmentActorInterface : public UInterface
 };
 
 /**
- * 
+ *	Provides the equipment-instance initialization contract for spawned equipment actors.
  */
 class IScWEquipmentActorInterface
 {

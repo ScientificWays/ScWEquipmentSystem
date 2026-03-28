@@ -7,6 +7,8 @@
 #include "EquipmentSystem/ScWEquipmentFunctionLibrary.h"
 #include "EquipmentSystem/ScWEquipmentManagerComponent.h"
 
+#include UE_INLINE_GENERATED_CPP_BY_NAME(ScWEquipmentFragment_SpawnActors)
+
 //~ Begin Statics
 TArray<AActor*> UScWEquipmentFragment_SpawnActors::GetAllEquipmentSpawnedActors(UScWEquipmentManagerComponent* InEquipmentManagerComponent)
 {
@@ -60,7 +62,6 @@ AActor* UScWEquipmentFragment_SpawnActors::GetEquipmentSpawnedActorByClass(UScWE
 //~ Begin Initialize
 UScWEquipmentFragment_SpawnActors::UScWEquipmentFragment_SpawnActors()
 {
-	
 }
 
 void UScWEquipmentFragment_SpawnActors::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const // UObject

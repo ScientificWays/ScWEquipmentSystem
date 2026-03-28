@@ -6,10 +6,11 @@
 
 #include "EquipmentSystem/ScWEquipmentInstance.h"
 
+#include UE_INLINE_GENERATED_CPP_BY_NAME(ScWEquipmentFragment_AbilitySets)
+
 //~ Begin Initialize
 UScWEquipmentFragment_AbilitySets::UScWEquipmentFragment_AbilitySets()
 {
-	
 }
 
 void UScWEquipmentFragment_AbilitySets::BP_OnEquipped_Implementation(UScWEquipmentInstance* InInstance) const // UScWEquipmentFragment

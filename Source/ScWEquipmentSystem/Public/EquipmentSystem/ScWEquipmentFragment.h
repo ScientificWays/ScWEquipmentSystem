@@ -11,7 +11,7 @@
 class UScWEquipmentInstance;
 
 /**
- *
+ *	Base class for modular equipment behaviors that react to equip and unequip lifecycle events.
  */
 UCLASS(MinimalAPI, Const, Abstract, Blueprintable, BlueprintType, DefaultToInstanced, EditInlineNew, meta = (DisplayName = "[ScW] Equipment Fragment Base"))
 class UScWEquipmentFragment : public UObject

@@ -1,7 +1,6 @@
 // Scientific Ways
 
 using UnrealBuildTool;
-using System.IO; // for Path
 
 public class ScWEquipmentSystem : ModuleRules
 {
