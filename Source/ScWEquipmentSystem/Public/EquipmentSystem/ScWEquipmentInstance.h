@@ -21,7 +21,7 @@ struct FGameplayMessage_EquipmentInstance
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = "Equipment", EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<class UScWEquipmentInstance> EquipmentInstance;
 };
 
@@ -41,21 +41,21 @@ public:
 	virtual bool IsSupportedForNetworking() const override { return true; } // UObject
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override; // UObject
 
-	UFUNCTION(BlueprintPure, Category = "Equipment")
+	UFUNCTION(Category = "Equipment", BlueprintPure)
 	UScWEquipmentManagerComponent* GetOwningEquipmentManagerComponent() const;
 
-	UFUNCTION(BlueprintPure, Category = "Equipment")
+	UFUNCTION(Category = "Equipment", BlueprintPure)
 	UObject* GetInstigator() const { return Instigator; }
 	void SetInstigator(UObject* InInstigator) { Instigator = InInstigator; }
 
-	UFUNCTION(BlueprintPure, Category = "Equipment")
+	UFUNCTION(Category = "Equipment", BlueprintPure)
 	const UScWEquipmentDefinition* GetEquipmentDefinition() const { return EquipmentDefinition; }
 	void SetEquipmentDefinition(const UScWEquipmentDefinition* InEquipmentDefinition) { EquipmentDefinition = InEquipmentDefinition; }
 
-	UFUNCTION(BlueprintPure, Category = "Equipment")
+	UFUNCTION(Category = "Equipment", BlueprintPure)
 	APawn* GetPawn() const;
 
-	UFUNCTION(BlueprintPure, Category = "Equipment", meta = (DeterminesOutputType = PawnType))
+	UFUNCTION(Category = "Equipment", BlueprintPure, meta = (DeterminesOutputType = PawnType))
 	APawn* GetTypedPawn(TSubclassOf<APawn> PawnType) const;
 
 	virtual void OnEquipped();

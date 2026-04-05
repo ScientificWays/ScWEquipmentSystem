@@ -31,19 +31,19 @@ struct FScWEquipmentActorToSpawn
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = "Spawn", EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<AActor> ActorToSpawn;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = "Spawn", EditAnywhere, BlueprintReadWrite)
 	EScWEquipmentMesh AttachMesh = EScWEquipmentMesh::ThirdPerson;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = "Spawn", EditAnywhere, BlueprintReadWrite)
 	FName AttachSocket = TEXT("EquipmentSocket");
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = "Spawn", EditAnywhere, BlueprintReadWrite)
 	FTransform AttachTransform = FTransform::Identity;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = "Spawn", EditAnywhere, BlueprintReadWrite)
 	bool bIgnoreAttachTargetScale = true;
 };
 
